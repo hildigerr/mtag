@@ -12,28 +12,45 @@
 #define STATUS_FILENAME_EMPTY  2
 #define STATUS_FILE_INVALID    3
 #define STATUS_TAG_EMPTY       4
+#define STATUS_FILE_NOT_SAVED  5
 
-const char * version = "0.0.1";
+const char * version = "0.0.2";
 
 int main( int argc, char * argv[] )
 {
-    int i, opt, opqt = 3, status = STATUS_OK;
-    const char * sep = NULL;
-    const char * opts = "hvl::";
+    int i, opt, opqt = 7, status = STATUS_OK;
+    const char * sep = NULL,
+               * title = NULL,
+               * artist = NULL,
+               * album = NULL,
+               * genre = NULL;
+    const char * opts = "hvl::t:a:A:g:";
     const char * usage[opqt+1] = {
-        "[-hv] | [-l[separator]] filename",
+        "[-hv] | [-l[separator]] [-t title] [-a artist] [-A album] [-g genre] filename",
         "Display this help message and exit",
         "Display version information and exit",
-        "List all the file's tags"
+        "List all the file's tags",
+        "Set the file's title tag",
+        "Set the file's artist tag",
+        "Set the file's album tag",
+        "Set the file's genre tag"
     };
     struct option options[opqt] = {
         { "help", no_argument, NULL, 'h' },
         { "version", no_argument, NULL, 'v' },
-        { "list", optional_argument, NULL, 'l' }
+        { "list", optional_argument, NULL, 'l' },
+        { "title", required_argument, NULL, 't' },
+        { "artist", required_argument, NULL, 'a' },
+        { "album", required_argument, NULL, 'A' },
+        { "genre", required_argument, NULL, 'g' }
     };
 
     while( (opt = getopt_long( argc, argv, opts, options, &i )) != -1 ) {
         switch( opt ) {
+            case 't': title = optarg; break;
+            case 'a': artist = optarg; break;
+            case 'A': album = optarg; break;
+            case 'g': genre = optarg; break;
             case 'l':
                 if( optarg ) sep = optarg;
                 else sep = ": ";
@@ -59,9 +76,18 @@ int main( int argc, char * argv[] )
     TagLib::File * file = fh.file();
     if( !(file && file->isValid()) ) return STATUS_FILE_INVALID;
 
-//     TagLib::Tag * tag = file.tag();
-//     if( !tag ) return STATUS_FILE_INVALID;
-//     if( tag->isEmpty() ) status = STATUS_TAG_EMPTY;
+    TagLib::Tag * tag = file->tag();
+    if( !tag ) return STATUS_FILE_INVALID;
+
+    if( title ) tag->setTitle( title );
+    if( artist ) tag->setArtist( artist );
+    if( album ) tag->setAlbum( album );
+    if( genre ) tag->setGenre( genre );
+
+    if( title || artist || album || genre )
+        if( !file->save() ) return STATUS_FILE_NOT_SAVED;
+
+    if( tag->isEmpty() ) status = STATUS_TAG_EMPTY;
 
     if( sep ) { /* implies --list */
         TagLib::PropertyMap map = file->properties();
