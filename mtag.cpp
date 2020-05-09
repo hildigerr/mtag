@@ -2,6 +2,7 @@
 #include <getopt.h>
 
 #include <taglib/fileref.h>
+#include <taglib/tfile.h>
 #include <taglib/tag.h>
 #include <taglib/tpropertymap.h>
 
@@ -52,15 +53,18 @@ int main( int argc, char * argv[] )
 
     if( optind >= argc ) return STATUS_FILENAME_EMPTY;
 
-    TagLib::FileRef file(argv[optind]);
-    if( file.isNull() ) return STATUS_FILE_INVALID;
+    TagLib::FileRef fh(argv[optind]);
+    if( fh.isNull() ) return STATUS_FILE_INVALID;
     
+    TagLib::File * file = fh.file();
+    if( !(file && file->isValid()) ) return STATUS_FILE_INVALID;
+
 //     TagLib::Tag * tag = file.tag();
 //     if( !tag ) return STATUS_FILE_INVALID;
 //     if( tag->isEmpty() ) status = STATUS_TAG_EMPTY;
 
     if( sep ) { /* implies --list */
-        TagLib::PropertyMap map = file.file()->properties();//tag->properties();
+        TagLib::PropertyMap map = file->properties();
         TagLib::PropertyMap::ConstIterator each;
         TagLib::StringList::ConstIterator element;
         for( each = map.begin(); each != map.end(); each++ )
