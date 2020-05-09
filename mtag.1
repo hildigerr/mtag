@@ -1,0 +1,58 @@
+.TH MTag 1 2020
+.SH NAME
+MTag \- manipulate music file tags
+.SH SYNOPSIS
+\" mtag [-hv] | [-l[separator]] [-t title] [-a artist] [-A album] [-g genre] filename
+.BR mtag \ [ -h | v ]
+.P
+.BR mtag \ [ -l\fR[\fIseparator ]]\ [ -t
+.IR title ]
+.RB [ -a
+.IR artist ]
+.RB [ -A
+.IR album ]
+.RB  [ -g
+.IR genre ]\  filename
+.SH DESCRIPTION
+.B MTag
+is a
+.B TagLib
+based music file tag manipulator designed to be lightweight and composable.
+.SH OPTIONS
+.TP
+.BR -h ,\  --help
+Display a help message and exit.
+.TP
+.BR -v ,\  --version
+Display version information and exit.
+.TP
+.BR -l ,\  --list ,\  -l\fIseparator ,\  --list = \fIseparator
+List the file's tags as key value pairs.
+.IP
+The default separator for the pairs can be overridden by the
+.IR separator .
+.TP
+.BR -t\  \fItitle ,\  --title\  \fItitle
+Set the file's title tag.
+.TP
+.BR -a\ \fIartist ,\  --artist\  \fIartist
+Set the file's artist tag.
+.TP
+.BR -A\ \fIalbum ,\  --album\  \fIalbum
+Set the file's album tag.
+.TP
+.BR -g\ \fIgenre ,\ --genre\  \fIgenre
+Set the file's genre tag.
+.SH EXIT STATUS
+.IP 0
+The program exited normally.
+.IP 1
+An invalid option was given.
+.IP 2
+The filename parameter is missing.
+.IP 3
+The file is invalid.
+.IP 4
+The file's tag is empty.
+.IP 5
+Changes to the file's tag have not been saved.
