@@ -14,7 +14,8 @@
 #define STATUS_TAG_EMPTY       4
 #define STATUS_FILE_NOT_SAVED  5
 
-const char * version = "0.0.2";
+const char * copyright = "(c) 2020 Hildigerr Vergaray";
+const char * version = "0.1.0";
 
 int main( int argc, char * argv[] )
 {
@@ -64,6 +65,7 @@ int main( int argc, char * argv[] )
                 return status;
             case 'v':
                 printf( "%s %s\n", argv[0], version );
+                printf( "Copyright %s\nLicnese: %s\n", copyright, "Artistic-2.0" );
                 return status;
         }/* End opt Switch */
     }/* End While */
@@ -72,7 +74,7 @@ int main( int argc, char * argv[] )
 
     TagLib::FileRef fh(argv[optind]);
     if( fh.isNull() ) return STATUS_FILE_INVALID;
-    
+
     TagLib::File * file = fh.file();
     if( !(file && file->isValid()) ) return STATUS_FILE_INVALID;
 
