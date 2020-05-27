@@ -2,10 +2,12 @@
 .SH NAME
 MTag \- manipulate music file tags
 .SH SYNOPSIS
-\" mtag [-hv] | [-l[separator]] [-t title] [-a artist] [-A album] [-g genre] filename
+\" mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-g genre] filename
 .BR mtag \ [ -h | v ]
 .P
-.BR mtag \ [ -l\fR[\fIseparator ]]\ [ -t
+.BR mtag \ [ -l\fR[\fIseparator ]]\ [ -n
+.IR number ]
+.RB [ -t
 .IR title ]
 .RB [ -a
 .IR artist ]
@@ -31,6 +33,9 @@ List the file's tags as key value pairs.
 .IP
 The default separator for the pairs can be overridden by the
 .IR separator .
+.TP
+.BR -n\  \fInumber ,\ --track\  \fInumber
+Set the file's track number tag.
 .TP
 .BR -t\  \fItitle ,\  --title\  \fItitle
 Set the file's title tag.

@@ -1,4 +1,6 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 #include <getopt.h>
 
 #include <taglib/fileref.h>
@@ -15,22 +17,24 @@
 #define STATUS_FILE_NOT_SAVED  5
 
 const char * copyright = "(c) 2020 Hildigerr Vergaray";
-const char * version = "0.1.0";
+const char * version = "0.1.1";
 
 int main( int argc, char * argv[] )
 {
-    int i, opt, opqt = 7, status = STATUS_OK;
+    int i, opt, opqt = 8, status = STATUS_OK;
     const char * sep = NULL,
+               * track = NULL,
                * title = NULL,
                * artist = NULL,
                * album = NULL,
                * genre = NULL;
-    const char * opts = "hvl::t:a:A:g:";
+    const char * opts = "hvl::n:t:a:A:g:";
     const char * usage[opqt+1] = {
-        "[-hv] | [-l[separator]] [-t title] [-a artist] [-A album] [-g genre] filename",
+        "[-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-g genre] filename",
         "Display this help message and exit",
         "Display version information and exit",
         "List all the file's tags",
+        "Set the file's track number tag",
         "Set the file's title tag",
         "Set the file's artist tag",
         "Set the file's album tag",
@@ -40,6 +44,7 @@ int main( int argc, char * argv[] )
         { "help", no_argument, NULL, 'h' },
         { "version", no_argument, NULL, 'v' },
         { "list", optional_argument, NULL, 'l' },
+        { "track", required_argument, NULL, 'n' },
         { "title", required_argument, NULL, 't' },
         { "artist", required_argument, NULL, 'a' },
         { "album", required_argument, NULL, 'A' },
@@ -48,6 +53,7 @@ int main( int argc, char * argv[] )
 
     while( (opt = getopt_long( argc, argv, opts, options, &i )) != -1 ) {
         switch( opt ) {
+            case 'n': track = optarg; break;
             case 't': title = optarg; break;
             case 'a': artist = optarg; break;
             case 'A': album = optarg; break;
@@ -81,12 +87,20 @@ int main( int argc, char * argv[] )
     TagLib::Tag * tag = file->tag();
     if( !tag ) return STATUS_FILE_INVALID;
 
+    if( track ) {
+        char * endptr = NULL;
+        errno = 0;
+        status = strtol( track, &endptr, 10);
+        if(( errno )||( endptr == track )) return STATUS_OPTION_INVALID;
+        tag->setTrack( status );
+        status = STATUS_OK;
+    }/* End track If */
     if( title ) tag->setTitle( title );
     if( artist ) tag->setArtist( artist );
     if( album ) tag->setAlbum( album );
     if( genre ) tag->setGenre( genre );
 
-    if( title || artist || album || genre )
+    if( track || title || artist || album || genre )
         if( !file->save() ) return STATUS_FILE_NOT_SAVED;
 
     if( tag->isEmpty() ) status = STATUS_TAG_EMPTY;
