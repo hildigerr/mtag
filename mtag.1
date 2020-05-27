@@ -2,7 +2,7 @@
 .SH NAME
 MTag \- manipulate music file tags
 .SH SYNOPSIS
-\" mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-g genre] filename
+\" mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] filename
 .BR mtag \ [ -h | v ]
 .P
 .BR mtag \ [ -l\fR[\fIseparator ]]\ [ -n
@@ -13,6 +13,8 @@ MTag \- manipulate music file tags
 .IR artist ]
 .RB [ -A
 .IR album ]
+.RB [ -y
+.IR year ]
 .RB  [ -g
 .IR genre ]\  filename
 .SH DESCRIPTION
@@ -45,6 +47,9 @@ Set the file's artist tag.
 .TP
 .BR -A\ \fIalbum ,\  --album\  \fIalbum
 Set the file's album tag.
+.TP
+.BR -y\ \fIyear ,\  --year\  \fIyear
+Set the file's year tag.
 .TP
 .BR -g\ \fIgenre ,\ --genre\  \fIgenre
 Set the file's genre tag.
