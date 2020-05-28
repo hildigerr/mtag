@@ -2,7 +2,7 @@
 .SH NAME
 MTag \- manipulate music file tags
 .SH SYNOPSIS
-\" mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] filename
+\" mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename
 .BR mtag \ [ -h | v ]
 .P
 .BR mtag \ [ -l\fR[\fIseparator ]]\ [ -n
@@ -16,7 +16,9 @@ MTag \- manipulate music file tags
 .RB [ -y
 .IR year ]
 .RB  [ -g
-.IR genre ]\  filename
+.IR genre ]
+.RB [ -c
+.IR comment ]\  filename
 .SH DESCRIPTION
 .B MTag
 is a
@@ -53,6 +55,9 @@ Set the file's year tag.
 .TP
 .BR -g\ \fIgenre ,\ --genre\  \fIgenre
 Set the file's genre tag.
+.TP
+.BR -c\ \fIcomment ,\ --comment\  \fIcomment
+Set the file's comment tag.
 .SH EXIT STATUS
 .IP 0
 The program exited normally.
