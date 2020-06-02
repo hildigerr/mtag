@@ -2,9 +2,10 @@
 The Music Tag Manipulator, [MTag](https://github.com/hildigerr/mtag), is a music file tag manipulator by [Hildigerr Vergaray](https://github.com/hildigerr) using [TagLib](http://taglib.org). It was designed to be lightweight and composable.
 
 ### Options ###
-`Useage: mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename`
+`Useage: mtag [-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename`
  - -h, --help Displays a help message.
  - -v, --version Displays version information.
+ - -L, --list-genres Displays the canonical genres list.
  - -l, --list Lists the file's tags as key value pairs.
  - -n, --track Set the file's track number tag
  - -t, --title Set the file's title tag

@@ -7,6 +7,7 @@
 #include <taglib/tfile.h>
 #include <taglib/tag.h>
 #include <taglib/tpropertymap.h>
+#include <taglib/id3v1genres.h>
 
 /* Return Status */
 #define STATUS_OK              0
@@ -17,11 +18,11 @@
 #define STATUS_FILE_NOT_SAVED  5
 
 const char * copyright = "(c) 2020 Hildigerr Vergaray";
-const char * version = "0.1.3";
+const char * version = "0.1.4";
 
 int main( int argc, char * argv[] )
 {
-    int i, opt, opqt = 10, status = STATUS_OK;
+    int i, opt, opqt = 11, status = STATUS_OK;
     char * endptr = NULL;
     const char * sep = NULL,
                * track = NULL,
@@ -31,11 +32,12 @@ int main( int argc, char * argv[] )
                * year = NULL,
                * genre = NULL,
                * comment = NULL;
-    const char * opts = "hvl::n:t:a:A:y:g:c:";
+    const char * opts = "hvLl::n:t:a:A:y:g:c:";
     const char * usage[opqt+1] = {
-        "[-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename",
+        "[-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename",
         "Display this help message and exit",
         "Display version information and exit",
+        "Display the ordered list of canonical ID3v1 and Winamp genres",
         "List all the file's tags",
         "Set the file's track number tag",
         "Set the file's title tag",
@@ -48,6 +50,7 @@ int main( int argc, char * argv[] )
     struct option options[opqt] = {
         { "help", no_argument, NULL, 'h' },
         { "version", no_argument, NULL, 'v' },
+        { "list-genres", no_argument, NULL, 'L' },
         { "list", optional_argument, NULL, 'l' },
         { "track", required_argument, NULL, 'n' },
         { "title", required_argument, NULL, 't' },
@@ -76,12 +79,19 @@ int main( int argc, char * argv[] )
             case 'h':
                 printf( "  Usage: %s %s\n", argv[0], usage[0] );
                 for( i = 0; i < opqt; i++ )
-                    printf( "    -%c, --%-8s%s\n", options[i].val, options[i].name, usage[i+1] );
+                    printf( "    -%c, --%-12s%s\n", options[i].val, options[i].name, usage[i+1] );
                 return status;
             case 'v':
                 printf( "%s %s\n", argv[0], version );
                 printf( "Copyright %s\nLicnese: %s\n", copyright, "Artistic-2.0" );
                 return status;
+            case 'L': {
+                TagLib::StringList genres = TagLib::ID3v1::genreList();
+                TagLib::StringList::ConstIterator each;
+                for( each = genres.begin(); each != genres.end(); each++ )
+                    printf( "%s\n", each->toCString() );
+                return status;
+            }/* End L Case */
         }/* End opt Switch */
     }/* End While */
 

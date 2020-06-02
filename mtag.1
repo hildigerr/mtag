@@ -2,8 +2,8 @@
 .SH NAME
 MTag \- manipulate music file tags
 .SH SYNOPSIS
-\" mtag [-hv] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename
-.BR mtag \ [ -h | v ]
+\" mtag [-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename
+.BR mtag \ [ -h | v | L ]
 .P
 .BR mtag \ [ -l\fR[\fIseparator ]]\ [ -n
 .IR number ]
@@ -31,6 +31,9 @@ Display a help message and exit.
 .TP
 .BR -v ,\  --version
 Display version information and exit.
+.TP
+.BR -L ,\  --list-genres
+Display the ordered list of canonical ID3v1 and Winamp genres.
 .TP
 .BR -l ,\  --list ,\  -l\fIseparator ,\  --list = \fIseparator
 List the file's tags as key value pairs.
