@@ -2,7 +2,7 @@
 .SH NAME
 MTag \- manipulate music file tags
 .SH SYNOPSIS
-\" mtag [-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename
+\" mtag [-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] [-x key] filename
 .BR mtag \ [ -h | v | L ]
 .P
 .BR mtag \ [ -l\fR[\fIseparator ]]\ [ -n
@@ -18,7 +18,9 @@ MTag \- manipulate music file tags
 .RB  [ -g
 .IR genre ]
 .RB [ -c
-.IR comment ]\  filename
+.IR comment ]
+.RB [ -x
+.IR key ]\  filename
 .SH DESCRIPTION
 .B MTag
 is a
@@ -61,6 +63,9 @@ Set the file's genre tag.
 .TP
 .BR -c\ \fIcomment ,\ --comment\  \fIcomment
 Set the file's comment tag.
+.TP
+.BR -x\ \fIkey ,\ --remove\  \fIkey
+Remove an element with the specified key from the tag.
 .SH EXIT STATUS
 .IP 0
 The program exited normally.
