@@ -18,11 +18,11 @@
 #define STATUS_FILE_NOT_SAVED  5
 
 const char * copyright = "(c) 2020 Hildigerr Vergaray";
-const char * version = "0.1.4";
+const char * version = "0.1.5";
 
 int main( int argc, char * argv[] )
 {
-    int i, opt, opqt = 11, status = STATUS_OK;
+    int i, opt, opqt = 12, status = STATUS_OK;
     char * endptr = NULL;
     const char * sep = NULL,
                * track = NULL,
@@ -31,10 +31,11 @@ int main( int argc, char * argv[] )
                * album = NULL,
                * year = NULL,
                * genre = NULL,
-               * comment = NULL;
-    const char * opts = "hvLl::n:t:a:A:y:g:c:";
+               * comment = NULL,
+               * delete_me = NULL;
+    const char * opts = "hvLl::n:t:a:A:y:g:c:x:";
     const char * usage[opqt+1] = {
-        "[-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] filename",
+        "[-hvL] | [-l[separator]] [-n number] [-t title] [-a artist] [-A album] [-y year] [-g genre] [-c comment] [-x key] filename",
         "Display this help message and exit",
         "Display version information and exit",
         "Display the ordered list of canonical ID3v1 and Winamp genres",
@@ -45,7 +46,8 @@ int main( int argc, char * argv[] )
         "Set the file's album tag",
         "Set the file's year tag",
         "Set the file's genre tag",
-        "Set the file's comment tag"
+        "Set the file's comment tag",
+        "Remove an element from the tag"
     };
     struct option options[opqt] = {
         { "help", no_argument, NULL, 'h' },
@@ -58,7 +60,8 @@ int main( int argc, char * argv[] )
         { "album", required_argument, NULL, 'A' },
         { "year", required_argument, NULL, 'y' },
         { "genre", required_argument, NULL, 'g' },
-        { "comment", required_argument, NULL, 'c' }
+        { "comment", required_argument, NULL, 'c' },
+        { "remove", required_argument, NULL, 'x' }
     };
 
     while( (opt = getopt_long( argc, argv, opts, options, &i )) != -1 ) {
@@ -69,7 +72,8 @@ int main( int argc, char * argv[] )
             case 'A': album = optarg; break;
             case 'g': genre = optarg; break;
             case 'y': year = optarg; break;
-            case 'c': comment =optarg; break;
+            case 'c': comment = optarg; break;
+            case 'x': delete_me = optarg; break;
             case 'l':
                 if( optarg ) sep = optarg;
                 else sep = ": ";
@@ -126,7 +130,13 @@ int main( int argc, char * argv[] )
     if( genre ) tag->setGenre( genre );
     if( comment ) tag->setComment( comment );
 
-    if( track || title || artist || album || year || genre || comment )
+    if( delete_me ) {
+        TagLib::PropertyMap map = file()->properties();
+        map.erase( delete_me );
+        file()->setProperties(map);
+    }/* End delete_me If */
+
+    if( track || title || artist || album || year || genre || comment || delete_me )
         if( !file->save() ) return STATUS_FILE_NOT_SAVED;
 
     if( tag->isEmpty() ) status = STATUS_TAG_EMPTY;
